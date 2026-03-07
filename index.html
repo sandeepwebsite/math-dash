@@ -36,49 +36,22 @@ body{
     justify-content:center;
 }
 
-/* ===== TYPOGRAPHY REFINEMENT ===== */
-
-h1{
-    font-size:1.9rem;   /* was 2.2rem */
-    letter-spacing:-0.5px;
+/* ===== FLASH EFFECT ===== */
+@keyframes flash {
+    0% { background: rgba(34, 197, 94, 0.3); }
+    100% { background: transparent; }
 }
+.flash-correct { animation: flash 0.3s ease-out; }
 
-h2{
-    font-size:0.75rem;
-    opacity:.65;
-}
-
-/* Question */
-#problem{
-    font-size:2.1rem;
-    font-weight:800;
-    margin:24px 0 12px;
-}
-
-/* Input */
-input{
-    font-size:1.5rem;     /* was 2.3rem */
-}
-
-/* Timer */
-#live-timer{
-    font-size:1.2rem;   /* was 1.4rem */
-}
-
-/* Question counter */
-#q-count{
-    font-size:.75rem;
-}
-
-/* Buttons */
-.btn{
-    font-size:0.85rem;
-}
-
-/* Result time */
-#final-formatted{
-    font-size:2.4rem !important;
-}
+/* ===== TYPOGRAPHY ===== */
+h1{ font-size:1.9rem; letter-spacing:-0.5px; }
+h2{ font-size:0.75rem; opacity:.65; }
+#problem{ font-size:2.1rem; font-weight:800; margin:24px 0 12px; }
+input{ font-size:1.5rem; }
+#live-timer{ font-size:1.2rem; }
+#q-count{ font-size:.75rem; }
+.btn{ font-size:0.85rem; }
+#final-formatted{ font-size:2.4rem !important; }
 
 /* ===== APP CONTAINER ===== */
 #app{
@@ -101,7 +74,6 @@ section{
     border-radius:32px;
     padding:10px;
 }
-
 .hidden{display:none!important;}
 
 @keyframes fade{
@@ -128,15 +100,9 @@ h2{
 }
 
 /* ===== GRID ===== */
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
-}
+.grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 
 /* ===== BUTTONS ===== */
-/* ===== ADVANCED BUTTON ===== */
-
 .btn{
     position:relative;
     overflow:hidden;
@@ -146,65 +112,38 @@ h2{
     font-weight:700;
     font-size:0.85rem;
     cursor:pointer;
-
+    color: #cbd5f5;
     background:linear-gradient(145deg,#162035,#0e1626);
-
     box-shadow:
         0 8px 22px rgba(0,0,0,0.45),
         inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
-/* ===== ACTIVE BUTTON (Selected Quiz Length) ===== */
-
 .btn.active{
     background: linear-gradient(135deg, var(--accent), #3a86ff);
-    color: #fff;
+    color: #050a18;
+    font-weight: 800;
     transform: scale(1.05);
-
     box-shadow:
         0 10px 30px rgba(76,201,240,0.35),
         0 0 0 2px rgba(76,201,240,0.3);
 }
 
-/* Keep press animation working even when active */
-.btn.active:active{
-    transform: scale(0.97);
-    box-shadow:
-        0 4px 12px rgba(0,0,0,0.5) inset;
-}
+.btn.active:active{ transform: scale(0.97); box-shadow: 0 4px 12px rgba(0,0,0,0.5) inset; }
 
-/* Ripple animation */
 .btn::after{
-    content:"";
-    position:absolute;
-    width:120px;
-    height:120px;
-    background:rgba(255,255,255,0.25);
-    border-radius:50%;
-    transform:scale(0);
-    opacity:0;
-    pointer-events:none;
+    content:""; position:absolute; width:120px; height:120px;
+    background:rgba(255,255,255,0.25); border-radius:50%;
+    transform:scale(0); opacity:0; pointer-events:none;
 }
-
-.btn:active::after{
-    animation:ripple .4s ease;
-}
+.btn:active::after{ animation:ripple .4s ease; }
 
 @keyframes ripple{
-    0%{
-        transform:scale(0);
-        opacity:.6;
-    }
-    100%{
-        transform:scale(3);
-        opacity:0;
-    }
+    0%{ transform:scale(0); opacity:.6; }
+    100%{ transform:scale(3); opacity:0; }
 }
 
-.learn-btn{
-    background:linear-gradient(145deg,#1a2438,#111a2d);
-    color:#cbd5f5;
-}
+.learn-btn{ background:linear-gradient(145deg,#1a2438,#111a2d); color:#cbd5f5; }
 
 /* ===== CARD ===== */
 .card{
@@ -219,7 +158,6 @@ h2{
         inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
-/* ===== PROBLEM ===== */
 #problem{
     font-size:3.3rem;
     font-weight:800;
@@ -296,18 +234,7 @@ input:focus{
     cursor:pointer;
 }
 
-/* ===== RESULT ===== */
-.record-bar{
-    display:flex;
-    justify-content:space-between;
-    font-size:.8rem;
-    background:#050a18;
-    padding:10px 14px;
-    border-radius:14px;
-    margin-top:8px;
-}
-
-/* ===== POPUP ===== */
+/* ===== POPUP & COUNTDOWN ===== */
 .app-popup{
     position:fixed;
     inset:0;
@@ -342,63 +269,28 @@ input:focus{
     margin-bottom:15px;
 }
 
-.popup-body{
-    flex:1;
-    overflow-y:auto;
-}
+.popup-body{ flex:1; overflow-y:auto; }
+.popup-body table{ width:100%; border-collapse:collapse; }
+.popup-body td{ padding:10px; border-bottom:1px solid rgba(255,255,255,0.05); }
+.section-row td{ font-weight:bold; background:rgba(255,255,255,0.05); }
 
-.popup-body table{
-    width:100%;
-    border-collapse:collapse;
-}
+@keyframes slideUp{ from{transform:translateY(40px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+.popup-body::-webkit-scrollbar{ width:6px; }
+.popup-body::-webkit-scrollbar-thumb{ background:rgba(255,255,255,0.2); border-radius:10px; }
 
-.popup-body td{
-    padding:10px;
-    border-bottom:1px solid rgba(255,255,255,0.05);
-}
-
-.section-row td{
-    font-weight:bold;
-    background:rgba(255,255,255,0.05);
-}
-
-@keyframes slideUp{
-    from{transform:translateY(40px);opacity:0;}
-    to{transform:translateY(0);opacity:1;}
-}
-
-/* Scrollbar */
-.popup-body::-webkit-scrollbar{
-    width:6px;
-}
-.popup-body::-webkit-scrollbar-thumb{
-    background:rgba(255,255,255,0.2);
-    border-radius:10px;
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width:600px){
-    .popup-card{
-        height:92vh;
-        border-radius:24px;
-        padding:16px;
-    }
-}
-
+@media (max-width:600px){ .popup-card{ height:92vh; border-radius:24px; padding:16px; } }
 </style>
 </head>
 
 <body>
 <div id="app">
 
-<!-- MAIN MENU -->
 <section id="menu-main">
     <h1>Math Dash ⚡</h1>
-
     <h2>📚 Learn Hub</h2>
     <div class="grid">
-        <button class="btn learn-btn" onclick="openLearn('square')">⬜ Squares</button>
-        <button class="btn learn-btn" onclick="openLearn('cube')">🧊 Cubes</button>
+        <button class="btn learn-btn" onclick="openLearn('square')">x² Squares</button>
+        <button class="btn learn-btn" onclick="openLearn('cube')">x³ Cubes</button>
         <button class="btn learn-btn" style="grid-column:span 2" onclick="openLearn('table')">✖️ Tables</button>
     </div>
 
@@ -414,14 +306,13 @@ input:focus{
         <button class="btn" onclick="showSubMenu('sub')">➖ Subtraction</button>
         <button class="btn" onclick="showSubMenu('mul')">✖️ Multiply</button>
         <button class="btn" onclick="showSubMenu('div')">➗ Division</button>
-        <button class="btn" onclick="startGame('sq','13-125')">🔝 Square</button>
-        <button class="btn" onclick="startGame('cb','2-25')">📦 Cube</button>
-        <button class="btn" onclick="startGame('sqrt','11-125')">🧪 Sq Root</button>
-        <button class="btn" onclick="startGame('cbrt','2-30')">💎 Cube Root</button>
+        <button class="btn" onclick="startGame('sq','13-125')">x² Square</button>
+        <button class="btn" onclick="startGame('cb','2-25')">x³ Cube</button>
+        <button class="btn" onclick="startGame('sqrt','11-125')">√x Sq Root</button>
+        <button class="btn" onclick="startGame('cbrt','2-30')">∛x Cube Root</button>
     </div>
 </section>
 
-<!-- SUB MENU -->
 <section id="menu-sub" class="hidden">
     <h1 id="sub-title">Select Mode</h1>
     <div class="grid" id="digit-grid" style="margin-top:10px;"></div>
@@ -430,24 +321,20 @@ input:focus{
     </div>
 </section>
 
-<!-- GAME -->
 <section id="game" class="hidden">
     <div class="top-bar">
         <span id="q-count">1 / 10</span>
         <span id="live-timer">00:00:00</span>
     </div>
-
-    <div class="card">
+    <div class="card" id="game-card">
         <div id="problem">--</div>
         <input type="tel" id="ans" inputmode="numeric" placeholder="Answer">
     </div>
-
     <div class="bottom-nav">
         <button class="quit-btn" onclick="toMain()">🚩 Abandon Quiz</button>
     </div>
 </section>
 
-<!-- RESULT -->
 <section id="result" class="hidden">
     <div class="card">
         <div id="res-mode-label" style="opacity:.7;font-weight:700;">MODE</div>
@@ -457,13 +344,11 @@ input:focus{
             <span>🐢 <span id="worst-time">--</span></span>
         </div>
     </div>
-
     <div class="stats-wrapper">
         <table style="width:100%;border-collapse:collapse;">
             <tbody id="res-history-body"></tbody>
         </table>
     </div>
-
     <div class="bottom-nav">
         <div class="grid">
             <button class="btn" style="background:var(--accent);color:#001018;" onclick="restart()">🔄 Again</button>
@@ -474,24 +359,22 @@ input:focus{
 
 <div id="popup" class="app-popup hidden">
     <div class="popup-card">
-
         <div class="popup-header">
             <h2 id="popup-title">Learn</h2>
             <button class="btn" onclick="closeLearn()">✕ Close</button>
         </div>
-
         <div class="popup-body">
-            <table>
-                <tbody id="learn-table-body"></tbody>
-            </table>
+            <table><tbody id="learn-table-body"></tbody></table>
         </div>
-
     </div>
 </div>
 
+<div id="countdown-overlay" class="app-popup hidden" style="z-index: 10000; background: rgba(11, 18, 32, 0.95);">
+    <div id="countdown-text" style="font-size: 8rem; font-weight: 900; color: var(--accent);">3</div>
 </div>
 
-<!-- KEEP YOUR EXISTING JS BELOW (NO CHANGE NEEDED) -->
+</div>
+
 <script>
 let config = { limit: 10, mode: '', digits: '' };
 let game = { current: 0, startTime: 0, timerInterval: null, answer: 0, running: false };
@@ -507,31 +390,20 @@ function openLearn(type) {
     const title = document.getElementById('popup-title');
     const table = document.getElementById('learn-table-body');
     const scrollArea = popup.querySelector('.popup-body');
-
     let html = '';
-
     if (type === 'table') {
         title.innerText = "✖️ Multiplication Tables (2-30)";
         for (let i = 2; i <= 30; i++) {
             html += `<tr class="section-row"><td>Table of ${i}</td></tr>`;
-            for (let j = 1; j <= 10; j++) {
-                html += `<tr><td>${i} × ${j} = ${i * j}</td></tr>`;
-            }
+            for (let j = 1; j <= 10; j++) html += `<tr><td>${i} × ${j} = ${i * j}</td></tr>`;
         }
-    } 
-    else if (type === 'square') {
-        title.innerText = "⬜ Squares (2-30)";
-        for (let i = 2; i <= 30; i++) {
-            html += `<tr><td>${i}² = ${i * i}</td></tr>`;
-        }
-    } 
-    else if (type === 'cube') {
-        title.innerText = "🧊 Cubes (2-20)";
-        for (let i = 2; i <= 20; i++) {
-            html += `<tr><td>${i}³ = ${i * i * i}</td></tr>`;
-        }
+    } else if (type === 'square') {
+        title.innerText = "x² Squares (2-30)";
+        for (let i = 2; i <= 30; i++) { html += `<tr><td>${i}² = ${i * i}</td></tr>`; }
+    } else if (type === 'cube') {
+        title.innerText = "x³ Cubes (2-20)";
+        for (let i = 2; i <= 20; i++) { html += `<tr><td>${i}³ = ${i * i * i}</td></tr>`; }
     }
-
     table.innerHTML = html;
     popup.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
@@ -544,12 +416,8 @@ function closeLearn() {
     document.body.style.overflow = '';
 }
 
-
 function stopTimer() {
-    if (game.timerInterval) {
-        clearInterval(game.timerInterval);
-        game.timerInterval = null;
-    }
+    if (game.timerInterval) { clearInterval(game.timerInterval); game.timerInterval = null; }
 }
 
 function toMain() {
@@ -564,44 +432,52 @@ function showSubMenu(op) {
     const grid = document.getElementById('digit-grid');
     const icon = {add:'➕', sub:'➖', mul:'✖️', div:'➗'}[op];
     document.getElementById('sub-title').innerText = icon + ' ' + op.toUpperCase();
-
     grid.innerHTML = op === 'div' ? 
         `<button class="btn" onclick="startGame('div','1-12')">🔢 1-12 Table</button>
          <button class="btn" onclick="startGame('div','Mixed')">🌀 Mixed Div</button>` :
         `<button class="btn" onclick="startGame('${op}','2x2')">🥈 2 x 2</button>
          <button class="btn" onclick="startGame('${op}','2x3')">🥉 2 x 3</button>
          <button class="btn" onclick="startGame('${op}','3x3')">🥇 3 x 3</button>`;
-
     document.getElementById('menu-main').classList.add('hidden');
     document.getElementById('menu-sub').classList.remove('hidden');
 }
 
 function startGame(op, digits) {
-    stopTimer(); // prevent multiple timers (CRITICAL FIX)
-
-    config.mode = op;
-    config.digits = digits;
-
-    game.current = 1;
-    game.startTime = Date.now();
-    game.running = true;
-
+    stopTimer();
+    config.mode = op; config.digits = digits;
     document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
     document.getElementById('game').classList.remove('hidden');
+    document.getElementById('problem').innerText = "READY?";
+    game.running = false;
 
-    game.timerInterval = setInterval(() => {
-        if (game.running) {
-            document.getElementById('live-timer').innerText =
-                formatTime(Date.now() - game.startTime);
+    const overlay = document.getElementById('countdown-overlay');
+    const countEl = document.getElementById('countdown-text');
+    overlay.classList.remove('hidden');
+    let count = 3;
+    countEl.innerText = count;
+    countEl.style.color = "var(--accent)";
+
+    const cdInterval = setInterval(() => {
+        count--;
+        if (count > 0) countEl.innerText = count;
+        else if (count === 0) {
+            countEl.innerText = "GO!";
+            countEl.style.color = "var(--accent2)";
+        } else {
+            clearInterval(cdInterval);
+            overlay.classList.add('hidden');
+            game.current = 1;
+            game.startTime = Date.now();
+            game.running = true;
+            game.timerInterval = setInterval(() => {
+                if (game.running) document.getElementById('live-timer').innerText = formatTime(Date.now() - game.startTime);
+            }, 50);
+            nextQuestion();
         }
-    }, 50);
-
-    nextQuestion();
+    }, 800);
 }
 
-function restart() {
-    startGame(config.mode, config.digits);
-}
+function restart() { startGame(config.mode, config.digits); }
 
 function formatTime(ms) {
     let m = Math.floor(ms / 60000);
@@ -613,116 +489,77 @@ function formatTime(ms) {
 function nextQuestion() {
     document.getElementById('q-count').innerText = `${game.current} / ${config.limit}`;
     const input = document.getElementById('ans');
+    let n, n1, n2, d = config.digits, op = config.mode, probTxt = '';
 
-    let n, n1, n2, d = config.digits, op = config.mode;
-    let probTxt = '';
-
-    if (op === 'sq') {
-        n = rand(13, 125);
-        game.answer = n * n;
-        probTxt = `${n}²`;
-    } 
-    else if (op === 'cb') {
-        n = rand(2, 25);
-        game.answer = n * n * n;
-        probTxt = `${n}³`;
-    } 
-    else if (op === 'sqrt') {
-        game.answer = rand(11, 125);
-        n = game.answer * game.answer;
-        probTxt = `√${n}`;
-    } 
-    else if (op === 'cbrt') {
-        game.answer = rand(2, 30);
-        n = game.answer * game.answer * game.answer;
-        probTxt = `∛${n}`;
-    } 
+    if (op === 'sq') { n = rand(13, 125); game.answer = n * n; probTxt = `${n}²`; } 
+    else if (op === 'cb') { n = rand(2, 25); game.answer = n * n * n; probTxt = `${n}³`; } 
+    else if (op === 'sqrt') { game.answer = rand(11, 125); n = game.answer * game.answer; probTxt = `√${n}`; } 
+    else if (op === 'cbrt') { game.answer = rand(2, 30); n = game.answer * game.answer * game.answer; probTxt = `∛${n}`; } 
     else if (op === 'div') {
         n2 = d === '1-12' ? rand(2, 12) : rand(2, 25);
         game.answer = d === '1-12' ? rand(2, 12) : rand(2, 50);
         n1 = n2 * game.answer;
         probTxt = `${n1} ÷ ${n2}`;
-    } 
-    else {
+    } else {
         if(d==='2x2'){n1=rand(10,99);n2=rand(10,99)}
         else if(d==='2x3'){n1=rand(10,99);n2=rand(100,999)}
         else {n1=rand(100,999);n2=rand(100,999)}
-
         if(op==='add'){game.answer=n1+n2; probTxt=`${n1} + ${n2}`}
         else if(op==='sub'){ if(n1<n2)[n1,n2]=[n2,n1]; game.answer=n1-n2; probTxt=`${n1} - ${n2}` }
         else {game.answer=n1*n2; probTxt=`${n1} × ${n2}`}
     }
-
     document.getElementById('problem').innerText = probTxt;
     input.value = '';
-    
-    // Instant mobile focus fix (important for speed apps)
     setTimeout(()=>input.focus(), 30);
 }
 
-// FAST & ACCURATE answer check (no NaN bug)
-const ansInput = document.getElementById('ans');
+function triggerFlash() {
+    const card = document.getElementById('game-card');
+    card.classList.add('flash-correct');
+    setTimeout(() => card.classList.remove('flash-correct'), 300);
+}
 
+const ansInput = document.getElementById('ans');
 ansInput.addEventListener('input', checkAnswer);
-ansInput.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter') checkAnswer();
-});
+ansInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') checkAnswer(); });
 
 function checkAnswer(){
     if(!game.running) return;
-
     const val = ansInput.value.trim();
     if(val === '') return;
-
     const num = Number(val);
     if(Number.isNaN(num)) return;
-
     if(num === game.answer){
-        if (game.current < config.limit) {
-            game.current++;
-            nextQuestion();
-        } else {
-            finish();
-        }
+        triggerFlash();
+        if (game.current < config.limit) { game.current++; nextQuestion(); } 
+        else { finish(); }
     }
 }
 
 function finish() {
-    game.running = false;
-    stopTimer();
-
+    game.running = false; stopTimer();
     const ms = Date.now() - game.startTime;
     const key = `stats_${config.mode}_${config.digits}_${config.limit}`;
-
     let history = JSON.parse(localStorage.getItem(key) || "[]");
     history.unshift(ms);
     if (history.length > 5) history.pop();
     localStorage.setItem(key, JSON.stringify(history));
-
     document.getElementById('game').classList.add('hidden');
     document.getElementById('result').classList.remove('hidden');
     document.getElementById('final-formatted').innerText = formatTime(ms);
-
-    const icon = {add:'➕', sub:'➖', mul:'✖️', div:'➗', sq:'🔝', cb:'📦', sqrt:'🧪', cbrt:'💎'}[config.mode];
-    document.getElementById('res-mode-label').innerText =
-        `${icon} ${config.mode.toUpperCase()} ${config.digits} (${config.limit}Q)`;
-
+    const icon = {add:'➕', sub:'➖', mul:'✖️', div:'➗', sq:'x²', cb:'x³', sqrt:'√x', cbrt:'∛x'}[config.mode];
+    document.getElementById('res-mode-label').innerText = `${icon} ${config.mode.toUpperCase()} ${config.digits} (${config.limit}Q)`;
     let sorted = [...history].sort((a, b) => a - b);
     document.getElementById('best-time').innerText = formatTime(sorted[0]);
     document.getElementById('worst-time').innerText = formatTime(sorted[sorted.length-1]);
-
     document.getElementById('res-history-body').innerHTML = history.map((h, i) =>
         `<tr style="border-bottom:1px solid rgba(255,255,255,0.05)">
             <td style="padding:15px;opacity:0.7">Attempt ${history.length-i}</td>
             <td style="text-align:right;font-weight:bold;font-family:monospace">${formatTime(h)}</td>
-        </tr>`
-    ).join('');
+        </tr>`).join('');
 }
 
-function rand(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
+function rand(min, max) { return Math.floor(Math.random() * (max - min + 1) + min); }
 </script>
-
 </body>
 </html>
