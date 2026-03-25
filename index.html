@@ -8,58 +8,174 @@
     <title>Math Dash Pro</title>
     <style>
         :root {
-            --bg: #0b1220;
-            --card: #121a2b;
-            --accent: #4cc9f0;
-            --accent2: #22c55e;
-            --danger: #ef4444;
-            --text: #e6edf7;
-            --glass: rgba(18, 26, 43, 0.85);
+            /* Material 3 Dark Palette (Standard Android 14+) */
+            --bg: #1a1c1e;
+            --surface: #2d2f31;
+            --surface-variant: #44474a;
+            --primary: #d0bcff;
+            --on-primary: #381e72;
+            --secondary: #bbc3ff;
+            --on-secondary: #002d6f;
+            --tertiary: #77d8ff;
+            --danger: #ffb4ab;
+            --text: #e2e2e6;
+            --outline: #939094;
+
+            /* Native Android Radii */
+            --radius-lg: 28px;
+            /* Standard Card */
+            --radius-md: 16px;
+            /* Small Card/Option */
+            --radius-pill: 100px;
+            /* Buttons */
         }
 
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            transition: all 0.2s ease;
+            /* Removes default blue tap box */
+            font-family: 'Roboto', 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         body {
             margin: 0;
-            font-family: system-ui, -apple-system, sans-serif;
-            background: radial-gradient(circle at top, #1e293b, #05070f);
+            background-color: var(--bg);
             color: var(--text);
-            min-height: 100vh;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
             overflow-x: hidden;
+            line-height: 1.5;
         }
-        h1{
-            text-align: center;
+
+
+        /* Hide default keyboard on mobile */
+        input[readonly] {
+            cursor: default;
         }
+
+        /* ===== CUSTOM KEYPAD DESIGN ===== */
+        .keypad-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            width: 100%;
+            max-width: 320px;
+            margin: 20px auto 0;
+        }
+
+        .key {
+            all: unset;
+            height: 60px;
+            background: var(--surface);
+            color: var(--text);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .key:active {
+            background: var(--surface-v);
+            transform: scale(0.95);
+        }
+
+        /* Ripple for Keypad */
+        .key::after {
+            content: "";
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            opacity: 0;
+            transform: translate(-50%, -50%);
+        }
+
+        .key:active::after {
+            animation: ripple 0.4s ease-out;
+        }
+
+        .key.action {
+            background: var(--surface-v);
+            color: var(--primary);
+        }
+
+        .key.delete {
+            color: #ffb4ab;
+        }
+
+        /* Responsive: Hide keypad on Laptops if you prefer, 
+   but usually better to keep it for touch-enabled laptops */
+        @media (min-width: 1024px) {
+            .keypad-container {
+                max-width: 400px;
+            }
+
+            .key {
+                height: 70px;
+            }
+        }
+
         #app {
             width: 100%;
             max-width: 500px;
-            padding: 20px;
+            padding: 16px;
+            padding-bottom: 140px;
+            /* Space for fixed bottom navigation */
             display: flex;
             flex-direction: column;
         }
 
-        /* ===== ADAPTIVE GRID SYSTEM ===== */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin-bottom: 25px;
+        /* ===== NATIVE RIPPLE EFFECT ===== */
+        .btn,
+        .opt-btn {
+            position: relative;
+            overflow: hidden;
+            /* Clips the expanding ripple */
+            z-index: 1;
+            transition: background-color 0.2s, transform 0.1s;
         }
 
-        .operations-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            width: 100%;
+        .btn::after,
+        .opt-btn::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.25);
+            opacity: 0;
+            border-radius: 50%;
+            transform: scale(1, 1) translate(-50%, -50%);
+            transform-origin: 50% 50%;
         }
 
+        /* Trigger ripple on active/click */
+        .btn:active::after,
+        .opt-btn:active::after {
+            animation: ripple 0.5s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0) translate(-50%, -50%);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(30, 30) translate(-50%, -50%);
+                opacity: 0;
+            }
+        }
+
+        /* ===== BUTTON STYLING ===== */
         .btn {
             all: unset;
             cursor: pointer;
@@ -67,208 +183,353 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 18px 10px;
-            border-radius: 24px;
-            background: linear-gradient(145deg, #1e293b, #0f172a);
-            color: #cbd5e1;
-            font-weight: 600;
-            font-size: 0.9rem;
+            padding: 20px 12px;
+            border-radius: var(--radius-lg);
+            background-color: var(--surface);
+            color: var(--text);
+            font-weight: 500;
+            font-size: 0.95rem;
             text-align: center;
-            box-shadow: 0 8px 20px -5px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.05);
-            min-height: 85px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .btn .emoji {
-            font-size: 1.8rem;
-            margin-bottom: 6px;
+            font-size: 1.6rem;
+            margin-bottom: 8px;
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            background: #1e293b;
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+        .btn:active {
+            transform: scale(0.97);
+            /* Haptic-like shrink */
+            background-color: var(--surface-variant);
         }
 
         .btn.active {
-            background: var(--accent) !important;
-            color: #050a18 !important;
-            border: none;
+            background-color: var(--secondary) !important;
+            color: var(--on-secondary) !important;
         }
 
         .btn-wide {
             grid-column: span 2;
             flex-direction: row;
-            gap: 15px;
-            padding: 18px;
-            background: linear-gradient(135deg, #4cc9f0, #3a86ff);
-            color: #050a18;
-            font-weight: 800;
-            min-height: 65px;
+            gap: 12px;
+            background-color: var(--primary);
+            color: var(--on-primary);
+            font-weight: 600;
         }
 
-        /* ===== LAPTOP/DESKTOP OPTIMIZATION ===== */
-        @media (min-width: 900px) {
-            #app {
-                max-width: 950px;
-                padding: 40px;
-            }
-
-            .operations-grid {
-                grid-template-columns: repeat(4, 1fr);
-                gap: 18px;
-            }
-
-            .btn {
-                min-height: 110px;
-                font-size: 1rem;
-            }
-
-            .btn-wide {
-                grid-column: span 2;
-                flex-direction: row;
-            }
-
-            h1 {
-                font-size: 3.5rem;
-            }
+        /* ===== LAYOUT & TEXT ===== */
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 400;
+            /* Lighter weight for M3 feel */
+            margin: 32px 0 16px 8px;
+            color: var(--text);
         }
 
-        /* UI SECTIONS */
-        section {
+        h2 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--tertiary);
+            margin: 24px 0 12px 8px;
+            font-weight: 600;
+        }
+
+        .grid,
+        .operations-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        /* ===== GAME ELEMENTS ===== */
+        .card-main {
+            background-color: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 48px 24px;
+            text-align: center;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #problem {
+            font-size: 3.8rem;
+            font-weight: 400;
+            color: var(--primary);
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 100%;
+            max-width: 240px;
+            background: transparent;
+            border: none;
+            border-bottom: 3px solid var(--primary);
+            font-size: 3.5rem;
+            color: var(--text);
+            text-align: center;
+            outline: none;
+            padding-bottom: 4px;
+            caret-color: var(--primary);
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+
+        .opt-btn {
+            background: var(--surface-variant);
+            border: none;
+            color: var(--text);
+            padding: 26px 12px;
+            border-radius: var(--radius-md);
+            font-size: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* ===== NAVIGATION (MODERN BAR) ===== */
+        /* Container that sits at the very bottom */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            max-width: 100%;
+            background-color: #1a1c1e;
+            /* Match app background */
+            padding: 16px 20px 32px 20px;
+            /* Extra bottom padding for gesture nav */
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        /* The grid inside the nav */
+        .bottom-nav .grid {
+            display: flex;
+            gap: 12px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 !important;
+        }
+
+        /* Modern Segmented Button Design */
+        .bottom-nav .btn {
+            all: unset;
             flex: 1;
             display: flex;
-            flex-direction: column;
-            padding-bottom: 110px;
+            align-items: center;
+            justify-content: center;
+            height: 56px;
+            border-radius: 16px;
+            /* Modern "Squircle" instead of Pill */
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.1s, background-color 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Replay Button (Primary Action) */
+        .bottom-nav .btn:first-child {
+            background: var(--primary, #d0bcff);
+            /* M3 Primary */
+            color: #381e72;
+        }
+
+        /* Menu Button (Secondary Action) */
+        .bottom-nav .btn:last-child {
+            background: #2d2f31;
+            /* Surface Variant */
+            color: #e2e2e6;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Haptic Press Effect */
+        .bottom-nav .btn:active {
+            transform: scale(0.96);
+        }
+
+        /* ===== POPUPS & TABLES ===== */
+        /* Container for the background dimming */
+        .app-popup {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: flex-end;
+            /* Align content to bottom */
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease;
+        }
+
+        .app-popup.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* The actual Bottom Sheet */
+        .app-popup>div {
+            width: 100%;
+            max-width: 500px;
+            background: #1c1b1f;
+            /* M3 Surface Color */
+            border-radius: 28px 28px 0 0;
+            /* Only top corners rounded */
+            padding: 16px 24px 40px;
+            max-height: 85vh;
+            overflow-y: auto;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .app-popup.active>div {
+            transform: translateY(0);
+        }
+
+        /* Drag Handle (The little line at the top) */
+        .app-popup>div::before {
+            content: "";
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 32px;
+            height: 4px;
+            background: var(--surface-v, #44474a);
+            border-radius: 2px;
+        }
+
+        /* Slide animation for the Sub-Menu (Difficulty selection) */
+        #menu-sub {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg);
+            z-index: 50;
+            height: 70vh;
+            border-radius: 28px 28px 0 0;
+            padding: 20px;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+        }
+
+        #menu-sub:not(.hidden) {
+            display: block !important;
+            transform: translateY(0);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 8px;
+        }
+
+        td {
+            padding: 12px;
+            background: var(--surface);
+        }
+
+        tr td:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+
+        tr td:last-child {
+            border-radius: 0 12px 12px 0;
         }
 
         .hidden {
             display: none !important;
         }
 
-        .card-main {
-            background: linear-gradient(180deg, #121a2b, #0c1424);
-            border-radius: 35px;
-            padding: 35px 20px;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
-        #problem {
-            font-size: 3.2rem;
-            font-weight: 900;
-            color: white;
-            margin-bottom: 25px;
-            letter-spacing: -1px;
-        }
-
-        /* MCQ OPTIONS */
-        .options-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .opt-btn {
-            background: #1e293b;
-            border: 2px solid rgba(255, 255, 255, 0.05);
-            color: white;
-            padding: 20px;
-            border-radius: 22px;
-            font-size: 1.3rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .opt-btn:active {
-            background: var(--accent);
-            color: #000;
-            transform: scale(0.95);
-        }
-
-        input {
-            width: 100%;
-            max-width: 280px;
-            padding: 15px;
-            font-size: 2.5rem;
-            border-radius: 20px;
-            border: none;
-            outline: none;
-            text-align: center;
-            background: #050a18;
-            color: var(--accent);
-            font-family: monospace;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 92%;
-            max-width: 500px;
-            padding: 12px;
-            border-radius: 30px;
-            background: var(--glass);
-            backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 100;
-        }
-
-        .app-popup {
+        /* Fix: Ensure Countdown is at the absolute top and centered */
+        #countdown-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(15px);
+            background: rgba(15, 23, 42, 0.95);
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
+            z-index: 10000;
         }
 
-        @keyframes flash {
+        #countdown-overlay.hidden {
+            display: none;
+        }
+
+        #countdown-overlay:not(.hidden) {
+            display: flex;
+            /* Shows and centers when active */
+        }
+
+        #countdown-text {
+            font-size: 8rem;
+            font-weight: 900;
+            color: var(--primary);
+            text-shadow: 0 0 30px rgba(208, 188, 255, 0.4);
+            animation: pulse 0.7s infinite;
+        }
+
+        /* Green Correct Glow */
+        .flash-correct {
+            animation: correct-glow 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @keyframes correct-glow {
             0% {
-                background: rgba(34, 197, 94, 0.3);
+                box-shadow: 0 0 0px rgba(34, 197, 94, 0);
+                transform: scale(1);
+            }
+
+            30% {
+                box-shadow: 0 0 40px rgba(34, 197, 94, 0.8), inset 0 0 20px rgba(34, 197, 94, 0.4);
+                transform: scale(1.03);
+                border-color: #22c55e;
             }
 
             100% {
-                background: transparent;
+                box-shadow: 0 0 0px rgba(34, 197, 94, 0);
+                transform: scale(1);
             }
         }
 
-        .flash-correct {
-            animation: flash 0.3s ease-out;
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
+        /* Responsive adjustments for Laptop/Tablet */
+        @media (min-width: 900px) {
+            .operations-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
 
-        th,
-        td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .stats-row {
-            display: flex;
-            justify-content: space-around;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 15px;
-            border-radius: 18px;
-            margin-top: 15px;
-            font-size: 0.9rem;
+            #app {
+                max-width: 900px;
+            }
         }
     </style>
 </head>
@@ -305,9 +566,10 @@
                 <button class="btn" onclick="showSubMenu('cb')"><span class="emoji">x³</span>Cube</button>
                 <button class="btn" onclick="showSubMenu('sqrt')"><span class="emoji">√</span>Sq Root</button>
                 <button class="btn" onclick="showSubMenu('cbrt')"><span class="emoji">∛</span>Cube Root</button>
-                <button class="btn btn-wide" onclick="showSubMenu('hcf')"><span class="emoji">📟</span>HCF</button>
+                <button class="btn btn-wide" onclick="showSubMenu('hcf')"><span class="emoji">🧮</span>HCF</button>
             </div>
         </section>
+
 
         <section id="menu-sub" class="hidden">
             <h1 id="sub-title">Difficulty</h1>
@@ -323,7 +585,24 @@
             <div class="card-main" id="game-card">
                 <div id="problem">--</div>
                 <div id="input-container">
-                    <input type="tel" id="ans" inputmode="numeric" placeholder="?" autofocus>
+                    <div id="input-container">
+                        <input type="text" id="ans" placeholder="?" readonly>
+
+                        <div class="keypad-container" id="num-pad">
+                            <button class="key" onclick="pressKey('1')">1</button>
+                            <button class="key" onclick="pressKey('2')">2</button>
+                            <button class="key" onclick="pressKey('3')">3</button>
+                            <button class="key" onclick="pressKey('4')">4</button>
+                            <button class="key" onclick="pressKey('5')">5</button>
+                            <button class="key" onclick="pressKey('6')">6</button>
+                            <button class="key" onclick="pressKey('7')">7</button>
+                            <button class="key" onclick="pressKey('8')">8</button>
+                            <button class="key" onclick="pressKey('9')">9</button>
+                            <button class="key action" id="minus-btn" onclick="pressKey('-')">−</button>
+                            <button class="key" onclick="pressKey('0')">0</button>
+                            <button class="key delete" onclick="pressKey('back')">⌫</button>
+                        </div>
+                    </div>
                 </div>
                 <div id="options-container" class="options-container hidden">
                     <button class="opt-btn" id="optA" onclick="checkOption('optionA')"></button>
@@ -334,6 +613,7 @@
             </div>
             <div class="bottom-nav"><button class="btn" style="color:var(--danger); min-height:50px;" onclick="toMain()">🚩 Abandon</button></div>
         </section>
+
 
         <section id="result" class="hidden">
             <div class="card-main">
@@ -352,23 +632,27 @@
             </div>
             <div class="bottom-nav">
                 <div class="grid" style="margin-bottom:0">
-                    <button class="btn" style="background:var(--accent); color:#000; min-height:60px;" onclick="restart()">⚡ Replay</button>
-                    <button class="btn" style="min-height:60px;" onclick="toMain()">🏠 Menu</button>
+                    <div class="bottom-nav">
+                        <div class="grid">
+                            <button class="btn" onclick="restart()">⚡ Replay</button>
+                            <button class="btn" onclick="toMain()">🏠 Menu</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <div id="popup" class="app-popup hidden">
-            <div style="width:90%; max-width:450px; background:#1e293b; border-radius:30px; padding:25px; height:75vh; overflow-y:auto;">
-                <div style="display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; background:#1e293b; padding-bottom:15px; z-index:10;">
+        <div id="popup" class="app-popup hidden" onclick="if(event.target === this) closeLearn()">
+            <div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px; margin-bottom:15px;">
                     <h2 id="popup-title" style="margin:0">Reference</h2>
-                    <button onclick="closeLearn()" style="background:none; border:none; color:white; font-size:2rem; cursor:pointer;">✕</button>
+                    <button onclick="closeLearn()" style="background:none; border:none; color:white; font-size:1.5rem;">✕</button>
                 </div>
                 <table id="learn-table-body"></table>
             </div>
         </div>
 
-        <div id="countdown-overlay" class="app-popup hidden">
+        <div id="countdown-overlay" class="hidden">
             <div id="countdown-text" style="font-size:8rem; font-weight:900; color:var(--accent);">3</div>
         </div>
     </div>
@@ -696,9 +980,11 @@
         function startGame(op, digits) {
             config.mode = op;
             config.digits = digits;
+
             document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
             document.getElementById('game').classList.remove('hidden');
 
+            // Mode handling
             if (op === 'pct') {
                 document.getElementById('input-container').classList.add('hidden');
                 document.getElementById('options-container').classList.remove('hidden');
@@ -710,26 +996,55 @@
 
             const overlay = document.getElementById('countdown-overlay');
             const countEl = document.getElementById('countdown-text');
+
+            // Reset input
+            document.getElementById('ans').value = '';
+
+            // Show overlay properly
             overlay.classList.remove('hidden');
+
             let count = 3;
             countEl.innerText = count;
 
             const cd = setInterval(() => {
                 count--;
-                if (count > 0) countEl.innerText = count;
-                else if (count === 0) countEl.innerText = "GO!";
-                else {
+
+                if (count > 0) {
+                    countEl.innerText = count;
+                } else if (count === 0) {
+                    countEl.innerText = "GO!";
+                } else {
                     clearInterval(cd);
+
                     overlay.classList.add('hidden');
+
                     game.current = 1;
                     game.startTime = Date.now();
                     game.running = true;
+
                     game.timerInterval = setInterval(() => {
-                        document.getElementById('live-timer').innerText = formatTime(Date.now() - game.startTime);
+                        document.getElementById('live-timer').innerText =
+                            formatTime(Date.now() - game.startTime);
                     }, 50);
+
                     nextQuestion();
                 }
             }, 700);
+        }
+
+        function pressKey(val) {
+            const input = document.getElementById('ans');
+
+            if (val === 'back') {
+                input.value = input.value.slice(0, -1);
+            } else {
+                // Prevent multiple minus signs
+                if (val === '-' && input.value.includes('-')) return;
+                input.value += val;
+            }
+
+            // Auto-check logic
+            checkAnswer();
         }
 
         function nextQuestion() {
@@ -801,6 +1116,24 @@
                 document.getElementById('ans').value = '';
                 setTimeout(() => document.getElementById('ans').focus(), 50);
             }
+
+            const minusBtn = document.getElementById('minus-btn');
+            const inputField = document.getElementById('ans');
+            inputField.value = '';
+
+            // Only show minus button for Subtraction mode
+            if (config.mode === 'sub') {
+                minusBtn.style.visibility = 'visible';
+            } else {
+                minusBtn.style.visibility = 'hidden';
+            }
+
+            // Ensure the keypad is hidden for percentage mode
+            if (config.mode === 'pct') {
+                document.getElementById('num-pad').classList.add('hidden');
+            } else {
+                document.getElementById('num-pad').classList.remove('hidden');
+            }
         }
 
         function checkOption(choice) {
@@ -808,9 +1141,17 @@
             if (choice === game.correctOption) handleCorrect();
         }
 
+        // Update checkAnswer to handle negative numbers
         function checkAnswer() {
             if (!game.running) return;
-            if (parseInt(document.getElementById('ans').value) === game.answer) handleCorrect();
+            const userVal = document.getElementById('ans').value;
+
+            // Only check if value is not just a "-" sign
+            if (userVal === "-") return;
+
+            if (parseInt(userVal) === game.answer) {
+                handleCorrect();
+            }
         }
 
         function handleCorrect() {
@@ -851,7 +1192,9 @@
 
         function toMain() {
             clearInterval(game.timerInterval);
-            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('menu-sub').classList.add('hidden');
+            document.getElementById('game').classList.add('hidden');
+            document.getElementById('result').classList.add('hidden');
             document.getElementById('menu-main').classList.remove('hidden');
         }
 
@@ -871,6 +1214,7 @@
         }
 
         function openLearn(type) {
+            const popup = document.getElementById('popup');
             const table = document.getElementById('learn-table-body');
             let html = '';
             if (type === 'square') {
@@ -878,19 +1222,80 @@
             } else if (type === 'cube') {
                 for (let i = 2; i <= 20; i++) html += `<tr><td>${i}³</td><td style="text-align:right"><b>${i*i*i}</b></td></tr>`;
             } else if (type === 'table') {
-                for (let i = 2; i <= 15; i++) {
+                for (let i = 2; i <= 30; i++) {
                     html += `<tr><td colspan="2" style="background:rgba(255,255,255,0.05); padding:10px; font-weight:bold; border-radius:10px">Table of ${i}</td></tr>`;
                     for (let j = 1; j <= 10; j++) html += `<tr><td>${i}×${j}</td><td style="text-align:right">${i*j}</td></tr>`;
                 }
             }
             table.innerHTML = html;
-            document.getElementById('popup').classList.remove('hidden');
+            popup.classList.remove('hidden');
+            // Small delay to allow the browser to register the removal of .hidden 
+            // before starting the transform animation
+            setTimeout(() => popup.classList.add('active'), 10);
         }
 
         function closeLearn() {
-            document.getElementById('popup').classList.add('hidden');
+            const popup = document.getElementById('popup');
+            popup.classList.remove('active');
+            setTimeout(() => popup.classList.add('hidden'), 300); // Hide after animation finishes
         }
         document.getElementById('ans').addEventListener('input', checkAnswer);
+
+        /* --- SWIPE TO CLOSE --- */
+        let touchStartY = 0;
+        const popupInner = document.querySelector('#popup > div');
+
+        popupInner.addEventListener('touchstart', e => {
+            touchStartY = e.changedTouches[0].screenY;
+        }, {
+            passive: true
+        });
+
+        popupInner.addEventListener('touchend', e => {
+            const touchEndY = e.changedTouches[0].screenY;
+            if (touchEndY - touchStartY > 80) closeLearn(); // Swipe down distance
+        }, {
+            passive: true
+        });
+
+
+        /* --- CORRECT GLOW & INPUT --- */
+        function handleCorrect() {
+            const card = document.getElementById('game-card');
+            const input = document.getElementById('ans');
+
+            // Trigger Green Glow
+            card.classList.remove('flash-correct');
+            void card.offsetWidth; // Force reflow to restart animation
+            card.classList.add('flash-correct');
+
+            if (navigator.vibrate) navigator.vibrate(40); // Native haptic feel
+
+            setTimeout(() => {
+                input.value = ''; // Clear for next Q
+                if (game.current < config.limit) {
+                    game.current++;
+                    nextQuestion();
+                } else {
+                    finish();
+                }
+            }, 250);
+        }
+
+        function pressKey(val) {
+            const input = document.getElementById('ans');
+            if (val === 'back') {
+                input.value = input.value.slice(0, -1);
+            } else {
+                if (val === '-' && input.value.includes('-')) return;
+                input.value += val;
+            }
+
+            // Auto-check if answer is right as user types
+            if (parseInt(input.value) === game.answer) {
+                handleCorrect();
+            }
+        }
     </script>
 </body>
 
